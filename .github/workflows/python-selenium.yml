@@ -43,13 +43,10 @@ jobs:
       run: |
         echo '${{ secrets.FIREBASE_JSON }}' > src/main/resources/firebase-service-account.json
 
-    - name: Cấp quyền chạy cho Maven
-      run: chmod +x ./mvnw
-
     - name: Khởi động Spring Boot Website dưới nền (Background)
       run: |
         # Ký tự & dưới đây để ép lệnh chạy ngầm mà không làm treo các bước phía sau
-        ./mvnw spring-boot:run &
+        mvn spring-boot:run &
         
         # Đợi 60 giây để web Java khởi động lên localhost:8080 thành công cắm vào CSDL
         echo "Đang chờ Website Java khởi động (khoảng 1 phút)..."
