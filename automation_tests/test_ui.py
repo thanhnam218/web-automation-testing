@@ -1,8 +1,6 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 @pytest.fixture
@@ -13,9 +11,8 @@ def driver():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     
-    # Khởi tạo WebDriver tự động tải Driver tương thích
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # Khởi tạo WebDriver tự động (Sử dụng Selenium Manager bản mới nhất, không cần webdriver-manager cũ)
+    driver = webdriver.Chrome(options=chrome_options)
     
     # Đợi tối đa 10s nếu các phần tử web load chậm
     driver.implicitly_wait(10)
