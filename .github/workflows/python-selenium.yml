@@ -27,11 +27,11 @@ jobs:
 
     steps:
     - name: Clone Code Repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # ============= PHẦN 1: CHẠY WEBSITE JAVA LÀM NỀN =============
     - name: Cài đặt JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -51,7 +51,7 @@ jobs:
         
     # ============= PHẦN 2: CHẠY AUTO TEST PYTHON SELENIUM =============
     - name: Cài đặt Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
         cache: 'pip'

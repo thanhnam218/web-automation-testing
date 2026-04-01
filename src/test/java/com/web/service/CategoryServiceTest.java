@@ -37,7 +37,7 @@ class CategoryServiceTest {
         });
         
         // Kiểm tra xem Service có trả ra đúng thông báo bắt lỗi như code gốc hay không
-        assertEquals("Id must null", exception.getMessage());
+        assertEquals("Id must null", exception.getDefaultMessage());
     }
 
     @Test
