@@ -30,8 +30,12 @@ def test_regression_all_pages_healthy(driver, url_path):
     """HỒI QUY: Quét chéo toàn bộ danh mục trang chính xem code mới có làm nát màn hình cũ không"""
     driver.get(f"http://localhost:8080{url_path}")
     source = driver.page_source
-    assert "Whitelabel Error Page" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} bị sập (Error 500)"
-    assert "404" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} không tìm thấy (Error 404)"
+    
+    # In ra chút nội dung mã nguồn vào Message lỗi để dễ chẩn đoán từ xa nếu báo Failed
+    snippet = source[:300].replace('\n', ' ') if source else "Rỗng"
+    
+    assert "Whitelabel Error Page" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} bị sập (Error 500). SOURCE BỊ TRẢ VỀ: {snippet}"
+    assert "404" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} không tìm thấy (Error 404). SOURCE BỊ TRẢ VỀ: {snippet}"
 
 # =========================================================================
 # 2. KIỂM THỬ LUỒNG NGHIỆP VỤ CHÍNH (Core Business Workflows)
