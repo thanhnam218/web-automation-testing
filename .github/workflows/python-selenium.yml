@@ -1,0 +1,68 @@
+name: End-to-End UI Testing với Python Selenium
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  selenium-e2e-test:
+    runs-on: ubuntu-latest
+    
+    # 1. Bật MySQL ảo
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: sapassword
+          MYSQL_DATABASE: Project_Fashion_Store
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot -psapassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Clone Code Repository
+      uses: actions/checkout@v3
+
+    # ============= PHẦN 1: CHẠY WEBSITE JAVA LÀM NỀN =============
+    - name: Cài đặt JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Cấp quyền chạy cho Maven
+      run: chmod +x ./mvnw
+
+    - name: Khởi động Spring Boot Website dưới nền (Background)
+      run: |
+        # Ký tự & dưới đây để ép lệnh chạy ngầm mà không làm treo các bước phía sau
+        ./mvnw spring-boot:run &
+        
+        # Đợi 60 giây để web Java khởi động lên localhost:8080 thành công cắm vào CSDL
+        echo "Đang chờ Website Java khởi động (khoảng 1 phút)..."
+        for i in {1..15}; do curl -s http://localhost:8080 > /dev/null && echo "Trang web đã Ready!" && break || sleep 5; done
+        
+    # ============= PHẦN 2: CHẠY AUTO TEST PYTHON SELENIUM =============
+    - name: Cài đặt Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Cài đặt Thư Viện Selenium và Pytest
+      run: |
+        cd automation_tests
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Thực Thi Lệnh Auto Test UI (Mở Chrome chạy)
+      run: |
+        cd automation_tests
+        pytest -v -s

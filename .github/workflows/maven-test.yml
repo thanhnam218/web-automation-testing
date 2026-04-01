@@ -1,0 +1,42 @@
+name: Spring Boot CI with Maven and MySQL
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: sapassword
+          MYSQL_DATABASE: Project_Fashion_Store
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot -psapassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Make application execute with Maven Wrapper
+      run: chmod +x ./mvnw
+
+    - name: Run Maven Tests
+      run: ./mvnw test
