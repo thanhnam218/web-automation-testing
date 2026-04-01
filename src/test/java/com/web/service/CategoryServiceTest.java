@@ -53,8 +53,8 @@ class CategoryServiceTest {
         savedCategory.setId(1L);
         savedCategory.setName("Áo Thun");
         
-        // Mô phỏng hàm save: Khi lưu thì trả về thực thể đã có ID
-        when(categoryRepository.save(category)).thenReturn(savedCategory);
+        // Mô phỏng hàm save: Khi lưu bất kỳ Category nào thì cũng trả về thực thể đã có ID
+        when(categoryRepository.save(any(Category.class))).thenReturn(savedCategory);
 
         // Act (Thực thi hàm save thật của Service)
         Category result = categoryService.save(category);
