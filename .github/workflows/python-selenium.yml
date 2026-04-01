@@ -39,6 +39,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
+    - name: Tiêm khóa bảo mật Firebase (GitHub Secrets)
+      run: |
+        echo '${{ secrets.FIREBASE_JSON }}' > src/main/resources/firebase-service-account.json
+
     - name: Cấp quyền chạy cho Maven
       run: chmod +x ./mvnw
 

@@ -37,6 +37,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Inject Firebase Secret (Security Best Practice)
+      run: |
+        echo '${{ secrets.FIREBASE_JSON }}' > src/main/resources/firebase-service-account.json
+
     - name: Make application execute with Maven Wrapper
       run: chmod +x ./mvnw
 
