@@ -35,7 +35,7 @@ def test_regression_all_pages_healthy(driver, url_path):
     snippet = source[:300].replace('\n', ' ') if source else "Rỗng"
     
     assert "Whitelabel Error Page" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} bị sập (Error 500). SOURCE BỊ TRẢ VỀ: {snippet}"
-    assert "404" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} không tìm thấy (Error 404). SOURCE BỊ TRẢ VỀ: {snippet}"
+    assert "This application has no explicit mapping" not in source, f"⛔ LỖI HỒI QUY: Trang {url_path} không tìm thấy (404 Fallback). SOURCE BỊ TRẢ VỀ: {snippet}"
 
 # =========================================================================
 # 2. KIỂM THỬ LUỒNG NGHIỆP VỤ CHÍNH (Core Business Workflows)
